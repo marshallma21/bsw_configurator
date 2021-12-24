@@ -154,29 +154,32 @@ extern "C" {
 *
 * @api
 */
+{% set NumPorts = DioInfo.AvailablePortPinsForWrite|length %}
 /** @violates @ref Dio_Cfg_C_REF_4 This warning appears when defining functions or objects that will be used by the upper layers. */
 CONST(Dio_PortLevelType, DIO_CONST) Dio_aAvailablePinsForWrite[DIO_NUM_PORTS_U16] = 
 {
-    (Dio_PortLevelType)0x0003FFFFUL,
-    (Dio_PortLevelType)0x0003FFFFUL,
-    (Dio_PortLevelType)0x0003FFFFUL,
-    (Dio_PortLevelType)0x0003FFFFUL,
-    (Dio_PortLevelType)0x0001FFFFUL
+{% for i in range(NumPorts) %}
+    (Dio_PortLevelType){{ DioInfo.AvailablePortPinsForWrite[i] }}UL
+    {%- if i < NumPorts - 1 %},{% endif %}
+
+{% endfor %}
 };
 
+{% set NumPorts = DioInfo.AvailablePortPinsForRead|length %}
 /** @violates @ref Dio_Cfg_C_REF_4 This warning appears when defining functions or objects that will be used by the upper layers. */
 CONST(Dio_PortLevelType, DIO_CONST) Dio_aAvailablePinsForRead[DIO_NUM_PORTS_U16] = 
 {
-    (Dio_PortLevelType)0x0003FFFFUL,
-    (Dio_PortLevelType)0x0003FFFFUL,
-    (Dio_PortLevelType)0x0003FFFFUL,
-    (Dio_PortLevelType)0x0003FFFFUL,
-    (Dio_PortLevelType)0x0001FFFFUL
+{% for i in range(NumPorts) %}
+    (Dio_PortLevelType){{ DioInfo.AvailablePortPinsForRead[i] }}UL
+    {%- if i < NumPorts - 1 %},{% endif %}
+
+{% endfor %}
 };
 
 
 /* ========== DioConfig ========== */
 
+{% set numChannelGroupsInConfig = get_numChannelGroupsInConfig() %}
 
 /**
 * @brief          Data structure for configuration DioConfig.
@@ -184,22 +187,35 @@ CONST(Dio_PortLevelType, DIO_CONST) Dio_aAvailablePinsForRead[DIO_NUM_PORTS_U16]
 /** @violates @ref Dio_Cfg_C_REF_4 This warning appears when defining functions or objects that will be used by the upper layers. */
 CONST(Dio_ConfigType, DIO_CONST) DioConfig = 
 {
-    (uint8)0x3,
+    (uint8){{ numChannelGroupsInConfig|inttohex }},
+    {% if numChannelGroupsInConfig != 0 %}
     &DioConfig_aChannelGroupList[0]
-    
+
+    {% else %}
+    NULL_PTR
+    {% endif %}
 };
 
+{% if numChannelGroupsInConfig != 0 %}
 /**
 * @brief          List of channel groups in configuration DioConfig.
 */
 /** @violates @ref Dio_Cfg_C_REF_4 This warning appears when defining functions or objects that will be used by the upper layers. */
-CONST(Dio_ChannelGroupType, DIO_CONST) DioConfig_aChannelGroupList[3] = 
+CONST(Dio_ChannelGroupType, DIO_CONST) DioConfig_aChannelGroupList[{{ numChannelGroupsInConfig }}] = 
 {
-    { DioConf_DioPort_DioPort_PortC, (uint8)0x00, (Dio_PortLevelType)0x00000001UL},
-    { DioConf_DioPort_DioPort_PortD, (uint8)0x00, (Dio_PortLevelType)0x00000001UL},
-    { DioConf_DioPort_DioPort_PortD, (uint8)0x00, (Dio_PortLevelType)0x00000001UL}
+{% for port in Dio.DioConfig %}
+{% for group in port.DioChannelGroup %}
+{% set i = get_ChannelGroupIndex() + 1 %}
+{% set offset, mask = get_mask_offset(group) %}
+    { DioConf_DioPort_{{ port.name  }}, (uint8){{ inttohex(offset,2) }}, (Dio_PortLevelType){{ inttohex(mask, 8) }}UL}
+{%- if i < numChannelGroupsInConfig %},
+{% endif %}
+{% endfor %}
+{% endfor %}
+
 
 };
+{% endif %}
 
 
 
@@ -238,3 +254,4 @@ CONST(Dio_ChannelGroupType, DIO_CONST) DioConfig_aChannelGroupList[3] =
 #endif
 
 /** @} */
+

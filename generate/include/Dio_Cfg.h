@@ -275,14 +275,34 @@ extern "C" {
 #define DioConf_DioPort_DioPort_PortC  ((uint8)0x02U)
 
 /**
-* @brief          Symbolic name for the channel Dio_Key1.
+* @brief          Symbolic name for the channel Dio_SWT_CW.
 *
 */
 
 
 /** @violates @ref Dio_Cfg_H_REF_1 The used compilers use more than 31 chars for identifiers. */
-#define  DioConf_DioChannel_Dio_Key1 ((uint16)0x004cU)
+#define  DioConf_DioChannel_Dio_SWT_CW ((uint16)0x004cU)
 
+/**
+* @brief          Symbolic name for the channel Dio_SWT_CCW.
+*
+*/
+
+
+/** @violates @ref Dio_Cfg_H_REF_1 The used compilers use more than 31 chars for identifiers. */
+#define  DioConf_DioChannel_Dio_SWT_CCW ((uint16)0x004dU)
+
+
+
+/**
+* @brief        Symbolic name for the channel group DioChannelGroup_0.
+*
+*/
+
+
+/** @violates @ref Dio_Cfg_H_REF_1 The used compilers use more than 31 chars for identifiers. */
+#define DioConf_DioChannelGroup_DioChannelGroup_0    \
+                (&DioConfig_aChannelGroupList[0])
 /* ---------- DioPort_PortD ---------- */
 
 /**
@@ -292,14 +312,45 @@ extern "C" {
 #define DioConf_DioPort_DioPort_PortD  ((uint8)0x03U)
 
 /**
-* @brief          Symbolic name for the channel Dio_LedBlue.
+* @brief          Symbolic name for the channel Dio_RelayA.
 *
 */
 
 
 /** @violates @ref Dio_Cfg_H_REF_1 The used compilers use more than 31 chars for identifiers. */
-#define  DioConf_DioChannel_Dio_LedBlue ((uint16)0x0060U)
+#define  DioConf_DioChannel_Dio_RelayA ((uint16)0x0060U)
 
+/**
+* @brief          Symbolic name for the channel Dio_RelayB.
+*
+*/
+
+
+/** @violates @ref Dio_Cfg_H_REF_1 The used compilers use more than 31 chars for identifiers. */
+#define  DioConf_DioChannel_Dio_RelayB ((uint16)0x006fU)
+
+
+
+/**
+* @brief        Symbolic name for the channel group DioChannelGroup_1.
+*
+*/
+
+
+/** @violates @ref Dio_Cfg_H_REF_1 The used compilers use more than 31 chars for identifiers. */
+#define DioConf_DioChannelGroup_DioChannelGroup_1    \
+                (&DioConfig_aChannelGroupList[1])
+
+
+/**
+* @brief        Symbolic name for the channel group DioChannelGroup_2.
+*
+*/
+
+
+/** @violates @ref Dio_Cfg_H_REF_1 The used compilers use more than 31 chars for identifiers. */
+#define DioConf_DioChannelGroup_DioChannelGroup_2    \
+                (&DioConfig_aChannelGroupList[2])
 
 /*=================================================================================================
 *                                             ENUMS
@@ -401,6 +452,7 @@ extern CONST(Dio_PortLevelType, DIO_CONST) Dio_aAvailablePinsForRead[DIO_NUM_POR
 * @brief          List of channel groups in configuration DioConfig.
 */
 
+extern CONST(Dio_ChannelGroupType, DIO_CONST) DioConfig_aChannelGroupList[3];
 
 
 #define DIO_STOP_SEC_CONFIG_DATA_UNSPECIFIED
